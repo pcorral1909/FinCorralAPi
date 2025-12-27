@@ -15,6 +15,7 @@ public sealed class AppDbContext : DbContext
     public DbSet<Prestamo> Prestamos => Set<Prestamo>();
     public DbSet<Abono> Abonos => Set<Abono>();
     public DbSet<Amortizacion> Amortizaciones => Set<Amortizacion>();
+    public DbSet<Usuario> Usuarios => Set<Usuario>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

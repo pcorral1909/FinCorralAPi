@@ -5,6 +5,7 @@ using MediatR;
 
 namespace FinCorralApi.Api.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class SampleController : BaseController
     {
         public SampleController(IMediator mediator) : base(mediator) { }

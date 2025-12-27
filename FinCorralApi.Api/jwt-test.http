@@ -1,0 +1,41 @@
+### Login para obtener token JWT
+POST https://localhost:7000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@fincorral.com",
+  "password": "Admin123!"
+}
+
+### Test endpoint público (sin token)
+GET https://localhost:7000/api/test/public
+
+### Test endpoint protegido (con token)
+GET https://localhost:7000/api/test/protected
+Authorization: Bearer {{token}}
+
+### Crear Cliente (requiere token)
+POST https://localhost:7000/api/clientes
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nombre": "Juan Pérez",
+  "email": "juan.perez@email.com",
+  "telefono": "555-1234"
+}
+
+### Obtener todos los clientes (requiere token)
+GET https://localhost:7000/api/clientes
+Authorization: Bearer {{token}}
+
+### Crear Préstamo Ordinario (requiere token)
+POST https://localhost:7000/api/prestamos/ordinario
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "clienteId": 1,
+  "monto": 2000,
+  "fechaPrimerPago": "2024-01-15T00:00:00"
+}

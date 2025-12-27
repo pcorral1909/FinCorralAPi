@@ -1,0 +1,107 @@
+### Crear Cliente (CQRS)
+POST https://localhost:7000/api/clientesv2
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nombre": "Juan Pérez",
+  "email": "juan.perez@email.com",
+  "telefono": "555-1234"
+}
+
+### Obtener todos los clientes (CQRS)
+GET https://localhost:7000/api/clientesv2
+Authorization: Bearer {{token}}
+
+### Obtener cliente por ID (CQRS)
+GET https://localhost:7000/api/clientesv2/1
+Authorization: Bearer {{token}}
+
+### Eliminar cliente (CQRS)
+DELETE https://localhost:7000/api/clientesv2/1
+Authorization: Bearer {{token}}
+
+### Crear Usuario Step 1
+POST https://localhost:7000/api/usuarios/step1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "telefono": "555-9876",
+  "email": "usuario@test.com"
+}
+
+### Crear Usuario Step 2
+POST https://localhost:7000/api/usuarios/step2
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "usuarioId": 1,
+  "nombreCompleto": "Juan Carlos Pérez",
+  "fechaNacimiento": "1990-05-15T00:00:00",
+  "curp": "PECJ900515HDFRRN09"
+}
+
+### Crear Contraseña Usuario
+POST https://localhost:7000/api/usuarios/password
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "usuarioId": 1,
+  "password": "MiPassword123!"
+}
+
+### Crear Préstamo Ordinario (CQRS)
+POST https://localhost:7000/api/prestamosv2/ordinario
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "clienteId": 1,
+  "monto": 2000,
+  "fechaPrimerPago": "2024-01-15T00:00:00"
+}
+
+### Crear Préstamo Con Tasa (CQRS)
+POST https://localhost:7000/api/prestamosv2/con-tasa
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "clienteId": 1,
+  "monto": 10000,
+  "tasaInteres": 6.0,
+  "fechaPrimerPago": "2024-01-26T00:00:00"
+}
+
+### Obtener préstamos por cliente (CQRS)
+GET https://localhost:7000/api/prestamosv2/cliente/1
+Authorization: Bearer {{token}}
+
+### Registrar abono (CQRS)
+POST https://localhost:7000/api/prestamosv2/1/abono
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+5000
+
+### Pagar amortización (CQRS)
+POST https://localhost:7000/api/prestamosv2/1/pagar-amortizacion
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "prestamoId": 1,
+  "numeroPago": 1,
+  "montoPagado": 525.00
+}
+
+### Eliminar préstamo (CQRS)
+DELETE https://localhost:7000/api/prestamosv2/1
+Authorization: Bearer {{token}}
+
+### Liquidar préstamo (CQRS)
+POST https://localhost:7000/api/prestamosv2/1/liquidar
+Authorization: Bearer {{token}}

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using FinCorralApi.Application.Interfaces;
 using FinCorralApi.Application.DTOs;
 using FinCorralApi.Domain.Entities;
@@ -8,6 +9,8 @@ namespace FinCorralApi.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class ClientesController : BaseController
 {
     private readonly IClienteRepository _clienteRepository;

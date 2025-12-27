@@ -26,6 +26,7 @@ public static class DependencyInjection
         // Repositories
         services.AddScoped<IClienteRepository, ClienteRepository>();
         services.AddScoped<IPrestamoRepository, PrestamoRepository>();
+        services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
         // External services
         // services.AddScoped<IEmailService, EmailService>();
