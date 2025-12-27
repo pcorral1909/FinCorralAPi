@@ -1,0 +1,55 @@
+### Crear Cliente
+POST https://localhost:7000/api/clientes
+Content-Type: application/json
+
+{
+  "nombre": "Juan Pérez",
+  "email": "juan.perez@email.com",
+  "telefono": "555-1234"
+}
+
+### Obtener todos los clientes
+GET https://localhost:7000/api/clientes
+
+### Obtener cliente por ID
+GET https://localhost:7000/api/clientes/1
+
+### Crear Préstamo Ordinario
+POST https://localhost:7000/api/prestamos/ordinario
+Content-Type: application/json
+
+{
+  "clienteId": 1,
+  "monto": 2000,
+  "fechaPrimerPago": "2024-01-15T00:00:00"
+}
+
+### Crear Préstamo Con Tasa
+POST https://localhost:7000/api/prestamos/con-tasa
+Content-Type: application/json
+
+{
+  "clienteId": 1,
+  "monto": 10000,
+  "tasaInteres": 6.0,
+  "fechaPrimerPago": "2024-01-26T00:00:00"
+}
+
+### Obtener préstamos de un cliente
+GET https://localhost:7000/api/prestamos/cliente/1
+
+### Registrar abono a préstamo
+POST https://localhost:7000/api/prestamos/1/abono
+Content-Type: application/json
+
+5000
+
+### Pagar amortización específica
+POST https://localhost:7000/api/prestamos/1/pagar-amortizacion
+Content-Type: application/json
+
+{
+  "prestamoId": 1,
+  "numeroPago": 1,
+  "montoPagado": 525.00
+}
