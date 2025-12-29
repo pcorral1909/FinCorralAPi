@@ -105,3 +105,29 @@ Authorization: Bearer {{token}}
 ### Liquidar préstamo (CQRS)
 POST https://localhost:7000/api/prestamosv2/1/liquidar
 Authorization: Bearer {{token}}
+
+### Crear Préstamo MSI (CQRS)
+POST https://localhost:7000/api/prestamosv2/msi
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "clienteId": 1,
+  "monto": 12000,
+  "meses": 12,
+  "fechaPrimerPago": "2024-02-01T00:00:00"
+}
+
+### Crear Préstamo Libre (CQRS)
+POST https://localhost:7000/api/prestamosv2/libre
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "clienteId": 1,
+  "monto": 5000
+}
+
+### Obtener Tipos de Préstamo
+GET https://localhost:7000/api/prestamosv2/tipos
+Authorization: Bearer {{token}}

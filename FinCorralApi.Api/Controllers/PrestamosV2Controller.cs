@@ -41,9 +41,9 @@ public class PrestamosV2Controller : BaseController
     }
 
     [HttpPost("{prestamoId}/abono")]
-    public async Task<IActionResult> RegistrarAbono(int prestamoId, [FromBody] decimal monto)
+    public async Task<IActionResult> RegistrarAbono(int prestamoId, [FromBody] AbonoDto dto)
     {
-        var command = new RegistrarAbonoCommand(prestamoId, monto);
+        var command = new RegistrarAbonoCommand(prestamoId, dto.Monto);
         var result = await Mediator.Send(command);
         return Ok(result);
     }
@@ -69,6 +69,30 @@ public class PrestamosV2Controller : BaseController
     {
         var command = new LiquidarPrestamoCommand(id);
         var result = await Mediator.Send(command);
+        return Ok(result);
+    }
+
+    [HttpPost("msi")]
+    public async Task<IActionResult> CrearPrestamoMSI([FromBody] CrearPrestamoMSIDto dto)
+    {
+        var command = new CrearPrestamoMSICommand(dto.ClienteId, dto.Monto, dto.Meses, dto.FechaPrimerPago);
+        var result = await Mediator.Send(command);
+        return Ok(result);
+    }
+
+    [HttpPost("libre")]
+    public async Task<IActionResult> CrearPrestamoLibre([FromBody] CrearPrestamoLibreDto dto)
+    {
+        var command = new CrearPrestamoLibreCommand(dto.ClienteId, dto.Monto);
+        var result = await Mediator.Send(command);
+        return Ok(result);
+    }
+
+    [HttpGet("tipos")]
+    public async Task<IActionResult> ObtenerTiposPrestamo()
+    {
+        var query = new GetTiposPrestamoQuery();
+        var result = await Mediator.Send(query);
         return Ok(result);
     }
 }

@@ -10,6 +10,18 @@ public record CrearPrestamoConTasaCommand(
     DateTime FechaPrimerPago
 ) : IRequest<CrearPrestamoResponseDto>;
 
+public record CrearPrestamoMSICommand(
+    int ClienteId,
+    decimal Monto,
+    int Meses,
+    DateTime FechaPrimerPago
+) : IRequest<CrearPrestamoResponseDto>;
+
+public record CrearPrestamoLibreCommand(
+    int ClienteId,
+    decimal Monto
+) : IRequest<PrestamoResponseDto>;
+
 public record RegistrarAbonoCommand(
     int PrestamoId,
     decimal Monto

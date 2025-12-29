@@ -15,6 +15,24 @@ public record CrearPrestamoConTasaDto(
     DateTime FechaPrimerPago
 );
 
+public record CrearPrestamoMSIDto(
+    int ClienteId,
+    decimal Monto,
+    int Meses,
+    DateTime FechaPrimerPago
+);
+
+public record CrearPrestamoLibreDto(
+    int ClienteId,
+    decimal Monto
+);
+
+public record TipoPrestamoDto(
+    int Id,
+    string Nombre,
+    string Descripcion
+);
+
 public record PrestamoDto(
     int Id,
     int ClienteId,

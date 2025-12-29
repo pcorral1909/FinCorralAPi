@@ -1,5 +1,6 @@
 using MediatR;
 using FinCorralApi.Application.Commands;
+using FinCorralApi.Application.Queries;
 using FinCorralApi.Application.DTOs;
 using FinCorralApi.Application.Interfaces;
 using FinCorralApi.Domain.Entities;
@@ -156,5 +157,127 @@ public class PagarAmortizacionHandler : IRequestHandler<PagarAmortizacionCommand
         await _prestamoRepository.UpdateAsync(prestamo);
 
         return "Amortización pagada exitosamente";
+    }
+}
+
+public class CrearPrestamoMSIHandler : IRequestHandler<CrearPrestamoMSICommand, CrearPrestamoResponseDto>
+{
+    private readonly IPrestamoRepository _prestamoRepository;
+    private readonly IClienteRepository _clienteRepository;
+
+    public CrearPrestamoMSIHandler(IPrestamoRepository prestamoRepository, IClienteRepository clienteRepository)
+    {
+        _prestamoRepository = prestamoRepository;
+        _clienteRepository = clienteRepository;
+    }
+
+    public async Task<CrearPrestamoResponseDto> Handle(CrearPrestamoMSICommand request, CancellationToken cancellationToken)
+    {
+        var cliente = await _clienteRepository.GetByIdAsync(request.ClienteId);
+        if (cliente == null) throw new ArgumentException("Cliente no encontrado");
+
+        var pagoMensual = request.Monto / request.Meses;
+        
+        var prestamo = new Prestamo
+        {
+            ClienteId = request.ClienteId,
+            Monto = request.Monto,
+            PagoQuincenal = pagoMensual,
+            FechaInicio = DateTime.UtcNow,
+            FechaPrimerPago = request.FechaPrimerPago,
+            FechaFin = request.FechaPrimerPago.AddMonths(request.Meses),
+            TipoPrestamo = TipoPrestamo.MSI,
+            InteresMensual = 0,
+            Meses = request.Meses
+        };
+
+        var prestamoCreado = await _prestamoRepository.CreateAsync(prestamo);
+        var amortizaciones = new List<AmortizacionDto>();
+        var fechaPago = request.FechaPrimerPago;
+
+        for (int i = 1; i <= request.Meses; i++)
+        {
+            var amortizacion = new Amortizacion
+            {
+                PrestamoId = prestamoCreado.Id,
+                NumeroPago = i,
+                FechaPago = fechaPago,
+                MontoCapital = pagoMensual,
+                MontoInteres = 0,
+                MontoTotal = pagoMensual,
+                SaldoPendiente = request.Monto - (pagoMensual * i),
+                Pagado = false
+            };
+            
+            prestamoCreado.Amortizaciones.Add(amortizacion);
+            amortizaciones.Add(new AmortizacionDto(i, fechaPago, pagoMensual, 0, pagoMensual, request.Monto - (pagoMensual * i), false));
+            fechaPago = fechaPago.AddMonths(1);
+        }
+
+        await _prestamoRepository.UpdateAsync(prestamoCreado);
+
+        return new CrearPrestamoResponseDto(
+            new PrestamoResponseDto(
+                prestamoCreado.Id, prestamoCreado.ClienteId, prestamoCreado.Monto,
+                prestamoCreado.PagoQuincenal, prestamoCreado.FechaInicio, prestamoCreado.FechaPrimerPago,
+                prestamoCreado.FechaFin, prestamoCreado.TipoPrestamo, prestamoCreado.InteresMensual, prestamoCreado.Meses
+            ),
+            amortizaciones
+        );
+    }
+}
+
+public class CrearPrestamoLibreHandler : IRequestHandler<CrearPrestamoLibreCommand, PrestamoResponseDto>
+{
+    private readonly IPrestamoRepository _prestamoRepository;
+    private readonly IClienteRepository _clienteRepository;
+
+    public CrearPrestamoLibreHandler(IPrestamoRepository prestamoRepository, IClienteRepository clienteRepository)
+    {
+        _prestamoRepository = prestamoRepository;
+        _clienteRepository = clienteRepository;
+    }
+
+    public async Task<PrestamoResponseDto> Handle(CrearPrestamoLibreCommand request, CancellationToken cancellationToken)
+    {
+        var cliente = await _clienteRepository.GetByIdAsync(request.ClienteId);
+        if (cliente == null) throw new ArgumentException("Cliente no encontrado");
+
+        var prestamo = new Prestamo
+        {
+            ClienteId = request.ClienteId,
+            Monto = request.Monto,
+            PagoQuincenal = 0,
+            FechaInicio = DateTime.UtcNow,
+            FechaPrimerPago = DateTime.UtcNow,
+            FechaFin = DateTime.UtcNow.AddYears(1),
+            TipoPrestamo = TipoPrestamo.Libre,
+            InteresMensual = 0,
+            Meses = 0
+        };
+
+        var prestamoCreado = await _prestamoRepository.CreateAsync(prestamo);
+
+        return new PrestamoResponseDto(
+            prestamoCreado.Id, prestamoCreado.ClienteId, prestamoCreado.Monto,
+            prestamoCreado.PagoQuincenal, prestamoCreado.FechaInicio, prestamoCreado.FechaPrimerPago,
+            prestamoCreado.FechaFin, prestamoCreado.TipoPrestamo, prestamoCreado.InteresMensual, prestamoCreado.Meses
+        );
+    }
+}
+
+public class GetTiposPrestamoHandler : IRequestHandler<GetTiposPrestamoQuery, List<TipoPrestamoDto>>
+{
+    public Task<List<TipoPrestamoDto>> Handle(GetTiposPrestamoQuery request, CancellationToken cancellationToken)
+    {
+        var tipos = new List<TipoPrestamoDto>
+        {
+            new(1, "Ordinario", "175 por cada 1000 pesos a 8 quincenas"),
+            new(2, "Con Tasa", "Préstamo con tasa de interés mensual variable"),
+            new(3, "MSI", "Meses sin intereses - pagos fijos mensuales"),
+            new(4, "Libre", "Préstamo libre sin tabla de amortización")
+        };
+        
+        return Task.FromResult(tipos);
     }
 }
