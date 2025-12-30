@@ -26,7 +26,7 @@ public class AmortizacionService : IAmortizacionService
                 MontoCapital: monto / 8m, // Capital dividido en 8 pagos
                 MontoInteres: pagoQuincenal - (monto / 8m),
                 MontoTotal: pagoQuincenal,
-                SaldoPendiente: monto - ((monto / 8m) * i),
+                SaldoPendiente: (pagoQuincenal * (8-i)),
                 Pagado: false
             ));
 

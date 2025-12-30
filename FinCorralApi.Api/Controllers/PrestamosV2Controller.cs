@@ -9,7 +9,7 @@ namespace FinCorralApi.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+//[Authorize]
 public class PrestamosV2Controller : BaseController
 {
     public PrestamosV2Controller(IMediator mediator) : base(mediator)
