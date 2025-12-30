@@ -20,7 +20,7 @@ public class AuthController : BaseController
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
         // Validar credenciales (implementar según tu lógica)
-        if (dto.Email == "admin@fincorral.com" && dto.Password == "Admin123!")
+        if (dto.Email == "peduardo.corral@gmail.com" && dto.Password == "Emy$150421")
         {
             var token = _jwtService.GenerateToken("1", dto.Email);
             var refreshToken = _jwtService.GenerateRefreshToken();

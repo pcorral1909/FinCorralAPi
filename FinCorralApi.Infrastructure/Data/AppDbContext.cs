@@ -45,6 +45,11 @@ public sealed class AppDbContext : DbContext
             b.Property(x => x.Nombre).HasMaxLength(200).IsRequired();
             b.Property(x => x.Email).HasMaxLength(320);
             b.Property(x => x.Telefono).HasMaxLength(24);
+
+            b.HasMany(x => x.Prestamos)
+            .WithOne(x => x.Cliente)
+            .HasForeignKey(x => x.ClienteId)
+            .OnDelete(DeleteBehavior.Cascade); // 🔥
         });
 
         modelBuilder.Entity<Prestamo>(b =>
@@ -53,9 +58,24 @@ public sealed class AppDbContext : DbContext
             b.HasOne(x => x.Cliente)
              .WithMany(x => x.Prestamos)
              .HasForeignKey(x => x.ClienteId);
+            b.HasMany(x => x.Abonos)
+               .WithOne(x => x.Prestamo)
+               .HasForeignKey(x => x.PrestamoId)
+               .IsRequired()                           // 🔒
+               .OnDelete(DeleteBehavior.Cascade);
+
+            b.HasMany(x => x.Amortizaciones)
+                .WithOne(x => x.Prestamo)
+                .HasForeignKey(x => x.PrestamoId)
+                .IsRequired()                           // 🔒
+                .OnDelete(DeleteBehavior.Cascade);
+
             b.Property(x => x.Monto).HasPrecision(18, 2);
             b.Property(x => x.PagoQuincenal).HasPrecision(18, 2);
             b.Property(x => x.InteresMensual).HasPrecision(5, 2);
+
+
+
             // 🔥 CONVERSIÓN ENUM ↔ STRING NUMÉRICO
             b.Property(x => x.TipoPrestamo)
              .HasConversion(

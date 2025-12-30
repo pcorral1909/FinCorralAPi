@@ -32,4 +32,19 @@ public class ClienteRepository : IClienteRepository
     {
         return await _context.Clientes.ToListAsync();
     }
+
+    public async Task<bool> DeleteClienteAsync(int clienteId)
+    {
+        var rows = await _context.Clientes
+            .Where(c => c.Id == clienteId)
+            .ExecuteDeleteAsync();
+
+        return rows > 0;
+    }
+
+   
+
+   
+
+
 }

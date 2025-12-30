@@ -8,4 +8,5 @@ public interface IPrestamoRepository
     Task<Prestamo> CreateAsync(Prestamo prestamo);
     Task<List<Prestamo>> GetByClienteIdAsync(int clienteId);
     Task UpdateAsync(Prestamo prestamo);
+    Task<bool> DeletePrestamoAsync(int id);   
 }

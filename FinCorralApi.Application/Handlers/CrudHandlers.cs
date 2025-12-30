@@ -17,7 +17,7 @@ public class EliminarClienteHandler : IRequestHandler<EliminarClienteCommand, st
 
     public async Task<string> Handle(EliminarClienteCommand request, CancellationToken cancellationToken)
     {
-        var cliente = await _clienteRepository.GetByIdAsync(request.Id);
+        var cliente = await _clienteRepository.DeleteClienteAsync(request.Id);
         if (cliente == null) throw new ArgumentException("Cliente no encontrado");
         
         // Aquí implementarías la lógica de eliminación
@@ -36,7 +36,7 @@ public class EliminarPrestamoHandler : IRequestHandler<EliminarPrestamoCommand, 
 
     public async Task<string> Handle(EliminarPrestamoCommand request, CancellationToken cancellationToken)
     {
-        var prestamo = await _prestamoRepository.GetByIdAsync(request.Id);
+        var prestamo = await _prestamoRepository.DeletePrestamoAsync(request.Id);
         if (prestamo == null) throw new ArgumentException("Préstamo no encontrado");
         
         // Aquí implementarías la lógica de eliminación

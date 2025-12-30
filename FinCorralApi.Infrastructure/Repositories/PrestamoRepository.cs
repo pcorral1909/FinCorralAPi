@@ -43,4 +43,12 @@ public class PrestamoRepository : IPrestamoRepository
         _context.Prestamos.Update(prestamo);
         await _context.SaveChangesAsync();
     }
+    public async Task<bool> DeletePrestamoAsync(int prestamoId)
+    {
+        var rows = await _context.Prestamos
+            .Where(p => p.Id == prestamoId)
+            .ExecuteDeleteAsync();
+
+        return rows > 0;
+    }
 }
