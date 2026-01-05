@@ -95,4 +95,6 @@ public class PrestamosV2Controller : BaseController
         var result = await Mediator.Send(query);
         return Ok(result);
     }
+
+   
 }

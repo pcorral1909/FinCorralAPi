@@ -104,6 +104,8 @@ public sealed class AppDbContext : DbContext
             b.Property(x => x.MontoInteres).HasPrecision(18, 2);
             b.Property(x => x.MontoTotal).HasPrecision(18, 2);
             b.Property(x => x.SaldoPendiente).HasPrecision(18, 2);
+            b.Property(x => x.Pagado).HasDefaultValue(false);
+
         });
     }
 }
